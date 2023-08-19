@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: com.roxy
+testFramework: junit
+sourceLanguage: java
+buildTool: gradle
+features: [annotation-api, app-name, data, data-jdbc, gradle, http-client, jackson-databind, java, java-application, jdbc-hikari, junit, logback, micronaut-aot, micronaut-build, micronaut-http-validation, netty-server, postgres, readme, security-annotations, security-jwt, shade, test-resources, yaml, yaml-build]
