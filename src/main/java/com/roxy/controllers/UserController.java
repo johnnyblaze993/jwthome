@@ -2,15 +2,11 @@ package com.roxy.controllers;
 
 import com.roxy.entities.Users;
 import com.roxy.repositories.UserRepository;
-//import io.micronaut.data.exceptions.DataAccessException;
-//import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.*;
 import io.micronaut.scheduling.TaskExecutors;
 import io.micronaut.scheduling.annotation.ExecuteOn;
 //import java.util.List;
 import java.util.Optional;
-
-// import java.util.UUID;
 
 @ExecuteOn(TaskExecutors.IO)
 @Controller("/users")
