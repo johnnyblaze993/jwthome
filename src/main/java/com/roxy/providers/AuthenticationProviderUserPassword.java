@@ -5,6 +5,7 @@ import io.micronaut.http.HttpRequest;
 import io.micronaut.security.authentication.AuthenticationProvider;
 import io.micronaut.security.authentication.AuthenticationRequest;
 import io.micronaut.security.authentication.AuthenticationResponse;
+import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;
@@ -15,11 +16,8 @@ import com.roxy.repositories.UserRepository;
 @Singleton
 public class AuthenticationProviderUserPassword implements AuthenticationProvider<HttpRequest<?>> {
 
-    private final UserRepository userRepository;
-
-    public AuthenticationProviderUserPassword(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    @Inject
+    private UserRepository userRepository;
 
     @Override
     public Publisher<AuthenticationResponse> authenticate(@Nullable HttpRequest<?> httpRequest,
