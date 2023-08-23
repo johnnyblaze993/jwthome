@@ -30,6 +30,7 @@ public class AuthenticationProviderUserPassword implements AuthenticationProvide
             if (userRepository.findByUsernameAndPassword(identity, secret) != null) {
                 emitter.next(AuthenticationResponse.success((String) authenticationRequest.getIdentity()));
                 emitter.complete();
+
                 System.out.println("User " + identity + " logged in successfully");
             } else {
                 emitter.error(AuthenticationResponse.exception());

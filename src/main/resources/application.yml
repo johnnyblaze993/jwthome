@@ -2,14 +2,16 @@ micronaut:
   application:
     name: jwthome
   security:
-    enabled: false
+    enabled: true
     authentication: bearer
-    token:
-      jwt:
-        signatures:
-          secret:
-            generator:
-              secret: mysecret
+    intercept-url-map:
+      - pattern: "/users/login"
+        http-method: POST
+        access:
+          - isAnonymous()
+      - pattern: "/**"
+        access:
+          - isAuthenticated()
   server:
     port: 1234
 datasources:
