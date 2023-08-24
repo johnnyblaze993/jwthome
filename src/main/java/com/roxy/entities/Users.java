@@ -12,4 +12,12 @@ public record Users(
         @NotNull String username,
         @NotNull String password) {
 
+    public Object getId() {
+        return id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
 }

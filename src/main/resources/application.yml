@@ -12,6 +12,15 @@ micronaut:
       - pattern: "/**"
         access:
           - isAuthenticated()
+    token:
+      jwt:
+        enabled: true
+        signatures:
+          secret:
+            generator:
+              secret: "ThisIsASecretKeyThatIs32Characters"
+            validation:
+              secret: "ThisIsASecretKeyThatIs32Characters"
   server:
     port: 1234
 datasources:
@@ -22,3 +31,8 @@ datasources:
     dialect: POSTGRES
     username: johnny
     password: mysecretpassword
+
+logging:
+  levels:
+    io.micronaut.security: TRACE
+    com.roxy.controllers: INFO
