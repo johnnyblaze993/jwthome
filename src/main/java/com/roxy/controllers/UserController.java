@@ -71,9 +71,10 @@ public class UserController {
       // Generate a token for the user
       Optional<String> userToken = tokenGenerator.generateToken(new HashMap<String, Object>() {
         {
-          put("sub", user.username()); // Include the 'sub' claim using the correct accessor
+          put("sub", user.username()); // Include the 'sub' claim using the correct accessor. Remember, this failed
+                                       // without this code
           put("userId", user.id()); // Embed the user's ID in the token
-          // You can add more claims as needed
+
         }
       });
 
