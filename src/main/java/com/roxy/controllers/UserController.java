@@ -17,6 +17,8 @@ import org.slf4j.Logger;
 import reactor.core.publisher.Mono;
 
 import jakarta.inject.Inject;
+
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -69,12 +71,14 @@ public class UserController {
 
     if (user != null) {
       // Generate a token for the user
+      long expirationTimeMillis = System.currentTimeMillis() + (60 * 1000); // 1 minute from now
+      Date expiration = new Date(expirationTimeMillis);
+
       Optional<String> userToken = tokenGenerator.generateToken(new HashMap<String, Object>() {
         {
-          put("sub", user.username()); // Include the 'sub' claim using the correct accessor. Remember, this failed
-                                       // without this code
-          put("userId", user.id()); // Embed the user's ID in the token
-
+          put("sub", user.username());
+          put("userId", user.id());
+          put("exp", expiration); // Explicitly setting expiration
         }
       });
 
