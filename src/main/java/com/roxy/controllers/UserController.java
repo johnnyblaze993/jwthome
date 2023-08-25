@@ -16,8 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
 import com.roxy.repositories.RefreshTokenRepository;
-import java.security.SecureRandom;
-import java.util.Base64;
 
 import reactor.core.publisher.Mono;
 
