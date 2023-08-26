@@ -1,17 +1,14 @@
 package com.roxy.controllers;
 
-import java.util.Optional;
-import com.roxy.repositories.RefreshTokenRepository;
+import com.roxy.dto.AuthenticationRequest;
+import com.roxy.entities.Users;
 import com.roxy.services.AuthService;
 
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
-import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.*;
+
 import jakarta.inject.Inject;
-import reactor.core.publisher.Mono;
-import io.micronaut.security.token.jwt.validator.JwtTokenValidator;
-import io.micronaut.security.token.reader.TokenReader;
 
 @Controller("/auth")
 public class AuthController {
@@ -19,27 +16,23 @@ public class AuthController {
     @Inject
     AuthService authService;
 
-    @Inject
-    RefreshTokenRepository refreshTokenRepository;
+    @Post("/login")
+    public HttpResponse<?> login(@Body AuthenticationRequest request) {
+        Users user = authService.authenticateUser(request.getUsername(), request.getPassword());
 
-    @Inject
-    TokenReader<HttpRequest<?>> tokenReader;
-
-    @Inject
-    JwtTokenValidator<HttpRequest<?>> jwtTokenValidator;
+        if (user != null) {
+            return authService.generateTokensForUser(user)
+                    .map(tokens -> (HttpResponse<?>) HttpResponse.ok(tokens))
+                    .orElse(HttpResponse.serverError());
+        } else {
+            return HttpResponse.notFound().body("User not found");
+        }
+    }
 
     @Post("/logout")
-    public Mono<HttpResponse<String>> logout(HttpRequest<?> request) {
-        Optional<String> tokenOpt = tokenReader.findToken(request);
-        if (tokenOpt.isPresent()) {
-            String token = tokenOpt.get();
-            return Mono.from(jwtTokenValidator.validateToken(token, null))
-                    .map(auth -> {
-                        Long userId = (Long) auth.getAttributes().get("userId");
-                        refreshTokenRepository.deleteByUserId(userId);
-                        return (HttpResponse<String>) HttpResponse.ok("Logged out successfully");
-                    }).onErrorReturn((HttpResponse<String>) HttpResponse.unauthorized().body("Invalid token"));
-        }
-        return Mono.just((HttpResponse<String>) HttpResponse.unauthorized().body("No token found"));
+    public HttpResponse<String> logout(HttpRequest<?> request) {
+        return authService.handleLogout(request)
+                .map(response -> HttpResponse.ok(response))
+                .orElse(HttpResponse.unauthorized());
     }
 }

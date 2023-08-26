@@ -5,7 +5,7 @@ micronaut:
     enabled: true
     authentication: bearer
     intercept-url-map:
-      - pattern: "/users/login"
+      - pattern: "/auth/login"
         http-method: POST
         access:
           - isAnonymous()
